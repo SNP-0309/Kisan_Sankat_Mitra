@@ -5,12 +5,12 @@
 
 const authService = require('../services/authService');
 const User = require('../models/User');
-const { sendSuccess } = require('../utils/apiResponse');
+const apiResponse = require('../utils/apiResponse');
 
 async function register(req, res, next) {
   try {
     const result = await authService.registerUser(req.body);
-    return sendSuccess(res, result, 'User registered successfully', 201);
+    return apiResponse.success(res, result, null, 201);
   } catch (err) {
     next(err);
   }
@@ -26,7 +26,7 @@ async function login(req, res, next) {
       password,
     });
 
-    return sendSuccess(res, result, 'Login successful', 200);
+    return apiResponse.success(res, result, null, 200);
   } catch (err) {
     next(err);
   }
@@ -36,17 +36,16 @@ async function getMe(req, res, next) {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        error: {
-          code: 'USER_NOT_FOUND',
-          message: 'User profile not found.',
-          timestamp: new Date().toISOString(),
-        },
-      });
+      return apiResponse.error(
+        res,
+        'USER_NOT_FOUND',
+        'User profile not found.',
+        null,
+        404
+      );
     }
 
-    return sendSuccess(res, { user: user.toSafeObject() }, 'Profile retrieved successfully');
+    return apiResponse.success(res, { user: user.toSafeObject() });
   } catch (err) {
     next(err);
   }
