@@ -55,14 +55,14 @@ function errorHandler(err, req, res, next) {
     );
   }
 
-  // Handle AppError
-  if (err instanceof AppError) {
+  // Handle AppError or any Error with explicit statusCode
+  if (err instanceof AppError || err.statusCode) {
     return apiResponse.error(
       res,
-      err.code,
+      err.code || 'BAD_REQUEST',
       err.message,
-      err.details,
-      err.statusCode
+      err.details || null,
+      err.statusCode || 400
     );
   }
 
