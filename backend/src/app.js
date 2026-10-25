@@ -13,6 +13,12 @@ const config = require('./config');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 const healthRoutes = require('./routes/healthRoutes');
 const authRoutes = require('./routes/authRoutes');
+const harvestRoutes = require('./routes/harvestRoutes');
+const recoveryRoutes = require('./routes/recoveryRoutes');
+const agentRoutes = require('./routes/agentRoutes');
+const shopRoutes = require('./routes/shopRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
@@ -83,6 +89,12 @@ app.use((req, res, next) => {
 const apiPrefix = config.server.apiPrefix;
 app.use(apiPrefix, healthRoutes);
 app.use(`${apiPrefix}/auth`, authRoutes);
+app.use(`${apiPrefix}/harvests`, harvestRoutes);
+app.use(`${apiPrefix}/recovery`, recoveryRoutes);
+app.use(`${apiPrefix}/agent`, agentRoutes);
+app.use(`${apiPrefix}/shops`, shopRoutes);
+app.use(`${apiPrefix}/orders`, orderRoutes);
+app.use(`${apiPrefix}/admin`, adminRoutes);
 
 // Root path redirect/info
 app.get('/', (req, res) => {

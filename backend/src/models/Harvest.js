@@ -37,7 +37,6 @@ const HarvestSchema = new mongoose.Schema(
     spoilageDeadline: {
       type: Date,
       required: true,
-      index: true,
     },
     storageLocation: {
       type: String,
