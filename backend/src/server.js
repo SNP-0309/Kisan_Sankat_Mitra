@@ -6,8 +6,12 @@
 const app = require('./app');
 const config = require('./config');
 const logger = require('./utils/logger');
+const { connectDB, disconnectDB } = require('./config/db');
 
 const PORT = config.server.port;
+
+// Connect to Database
+connectDB();
 
 const server = app.listen(PORT, () => {
   logger.info(`FasalRakshak AI Backend listening on port ${PORT}`, {
@@ -24,7 +28,8 @@ const server = app.listen(PORT, () => {
 function gracefulShutdown(signal) {
   logger.info(`Received ${signal}. Initiating graceful shutdown...`);
 
-  server.close((err) => {
+  server.close(async (err) => {
+    await disconnectDB();
     if (err) {
       logger.error('Error encountered while closing HTTP server:', err);
       process.exit(1);

@@ -12,6 +12,7 @@ const morgan = require('morgan');
 const config = require('./config');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 const healthRoutes = require('./routes/healthRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -81,6 +82,7 @@ app.use((req, res, next) => {
 // Mount Versioned Routes (/api/v1)
 const apiPrefix = config.server.apiPrefix;
 app.use(apiPrefix, healthRoutes);
+app.use(`${apiPrefix}/auth`, authRoutes);
 
 // Root path redirect/info
 app.get('/', (req, res) => {
