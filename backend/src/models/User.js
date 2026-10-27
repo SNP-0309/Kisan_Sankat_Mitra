@@ -36,12 +36,20 @@ const FarmerProfileSchema = new mongoose.Schema(
 const BuyerProfileSchema = new mongoose.Schema(
   {
     businessName: { type: String, trim: true, default: '' },
-    businessType: {
+    type: {
       type: String,
-      enum: ['trader', 'retailer', 'processor', 'other'],
+      enum: ['trader', 'retailer', 'processor'],
       default: 'trader',
     },
+    cropsBought: {
+      type: [String],
+      default: ['Tomato', 'Onion', 'Pomegranate', 'Grapes', 'Soybean', 'Wheat'],
+    },
+    district: { type: String, trim: true, default: '' },
+    verified: { type: Boolean, default: false },
+    listedOnMap: { type: Boolean, default: false },
     gstNumber: { type: String, trim: true, default: '' },
+    dailyIntakeCapacityMT: { type: Number, default: 0 },
   },
   { _id: false }
 );
@@ -117,6 +125,14 @@ const UserSchema = new mongoose.Schema(
 // Compound indexes for performant queries
 UserSchema.index({ location: '2dsphere' });
 UserSchema.index({ role: 1, status: 1 });
+UserSchema.index({
+  role: 1,
+  status: 1,
+  'buyerProfile.verified': 1,
+  'buyerProfile.listedOnMap': 1,
+});
+UserSchema.index({ 'buyerProfile.cropsBought': 1 });
+UserSchema.index({ 'buyerProfile.type': 1 });
 UserSchema.index({ createdAt: -1 });
 
 /**

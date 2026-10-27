@@ -19,6 +19,7 @@ const agentRoutes = require('./routes/agentRoutes');
 const shopRoutes = require('./routes/shopRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const buyerRoutes = require('./routes/buyerRoutes');
 
 const app = express();
 
@@ -95,6 +96,7 @@ app.use(`${apiPrefix}/agent`, agentRoutes);
 app.use(`${apiPrefix}/shops`, shopRoutes);
 app.use(`${apiPrefix}/orders`, orderRoutes);
 app.use(`${apiPrefix}/admin`, adminRoutes);
+app.use(`${apiPrefix}/buyers`, buyerRoutes);
 
 // Root path redirect/info
 app.get('/', (req, res) => {
