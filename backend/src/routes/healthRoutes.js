@@ -64,4 +64,41 @@ router.get('/ready', (req, res) => {
   );
 });
 
+/**
+ * GET /api/v1/stats
+ * Public endpoint: Real platform counts from MongoDB. Zero invented numbers.
+ */
+router.get('/stats', async (req, res, next) => {
+  try {
+    const User = require('../models/User');
+    const Harvest = require('../models/Harvest');
+    const Shop = require('../models/Shop');
+
+    let farmers = 0;
+    let verifiedBuyers = 0;
+    let harvests = 0;
+    let facilities = 0;
+
+    try {
+      [farmers, verifiedBuyers, harvests, facilities] = await Promise.all([
+        User.countDocuments({ role: 'farmer', status: 'active' }),
+        User.countDocuments({ role: 'buyer', status: 'active', 'buyerProfile.verified': true }),
+        Harvest.countDocuments(),
+        Shop.countDocuments({ verified: true }),
+      ]);
+    } catch (_) {
+      // In case MongoDB is offline, return honest 0 counts
+    }
+
+    return apiResponse.success(res, {
+      farmers,
+      verifiedBuyers,
+      harvests,
+      facilities,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

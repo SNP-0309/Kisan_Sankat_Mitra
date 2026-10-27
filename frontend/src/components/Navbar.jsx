@@ -3,9 +3,13 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { ShieldAlert, Sparkles, LogIn, LogOut, Globe, CheckCircle2, User } from 'lucide-react';
 
-export default function Navbar({ onOpenAiModal }) {
+export default function Navbar({ onOpenAiModal, currentView = 'home', onSelectView }) {
   const { user, role, switchDemoRole, logout, setIsAuthModalOpen } = useAuth();
   const { lang, setLang, t } = useLanguage();
+
+  const handleBrandClick = () => {
+    if (onSelectView) onSelectView('home');
+  };
 
   return (
     <header className="glass-nav">
@@ -22,7 +26,10 @@ export default function Navbar({ onOpenAiModal }) {
         }}
       >
         {/* Brand identity */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div
+          onClick={handleBrandClick}
+          style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+        >
           <div
             style={{
               width: 44,

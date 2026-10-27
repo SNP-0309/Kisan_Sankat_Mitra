@@ -35,12 +35,12 @@ export const DEMO_USERS = {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('fasal_user');
-    return saved ? JSON.parse(saved) : DEMO_USERS.farmer;
+    return saved ? JSON.parse(saved) : null;
   });
-  const [token, setToken] = useState(() => localStorage.getItem('fasal_token') || 'demo_token_farmer');
+  const [token, setToken] = useState(() => localStorage.getItem('fasal_token') || null);
   const [role, setRole] = useState(() => {
     const saved = localStorage.getItem('fasal_user');
-    return saved ? JSON.parse(saved).role : 'farmer';
+    return saved ? JSON.parse(saved).role : null;
   });
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 

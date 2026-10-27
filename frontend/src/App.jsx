@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
-import Navbar from './components/Navbar';
+import AppShell from './components/AppShell';
+import LandingPage from './pages/LandingPage';
 import FarmerDashboard from './pages/FarmerDashboard';
 import BuyerDashboard from './pages/BuyerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
@@ -9,11 +10,13 @@ import DisruptionModal from './components/DisruptionModal';
 import AddHarvestModal from './components/AddHarvestModal';
 import AiAssistantModal from './components/AiAssistantModal';
 import AuthModal from './pages/AuthModal';
+import AuthPage from './pages/AuthPage';
 import { api } from './services/api';
 
 function MainApp() {
-  const { role, user } = useAuth();
+  const { role, user, setIsAuthModalOpen } = useAuth();
   const { t } = useLanguage();
+  const [currentView, setCurrentView] = useState('home'); // 'home' | 'auth' | 'dashboard'
 
   const [harvests, setHarvests] = useState([]);
   const [loadingHarvests, setLoadingHarvests] = useState(true);
@@ -58,28 +61,48 @@ function MainApp() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar onOpenAiModal={() => setIsAiModalOpen(true)} />
+    <AppShell
+      currentView={currentView}
+      onSelectView={setCurrentView}
+      onOpenAiModal={() => setIsAiModalOpen(true)}
+    >
+      {currentView === 'auth' || (currentView === 'dashboard' && !user) ? (
+        <AuthPage
+          onLoginSuccess={() => setCurrentView('dashboard')}
+          onBack={() => setCurrentView('home')}
+        />
+      ) : currentView === 'home' || !user ? (
+        <LandingPage
+          onGetStarted={() => {
+            if (user) {
+              setCurrentView('dashboard');
+            } else {
+              setCurrentView('auth');
+            }
+          }}
+          onSelectView={setCurrentView}
+        />
+      ) : (
+        <>
+          {role === 'farmer' && (
+            <FarmerDashboard
+              harvests={harvests}
+              onOpenDisruptionModal={() => setIsDisruptionOpen(true)}
+              onOpenAddHarvestModal={() => setIsAddHarvestOpen(true)}
+              onHarvestUpdated={handleHarvestUpdated}
+            />
+          )}
 
-      <main className="app-container" style={{ flex: 1 }}>
-        {role === 'farmer' && (
-          <FarmerDashboard
-            harvests={harvests}
-            onOpenDisruptionModal={() => setIsDisruptionOpen(true)}
-            onOpenAddHarvestModal={() => setIsAddHarvestOpen(true)}
-            onHarvestUpdated={handleHarvestUpdated}
-          />
-        )}
+          {role === 'buyer' && (
+            <BuyerDashboard
+              harvests={harvests}
+              onHarvestUpdated={handleHarvestUpdated}
+            />
+          )}
 
-        {role === 'buyer' && (
-          <BuyerDashboard
-            harvests={harvests}
-            onHarvestUpdated={handleHarvestUpdated}
-          />
-        )}
-
-        {role === 'admin' && <AdminDashboard />}
-      </main>
+          {role === 'admin' && <AdminDashboard />}
+        </>
+      )}
 
       {/* Global Modals */}
       <DisruptionModal
@@ -101,45 +124,7 @@ function MainApp() {
       />
 
       <AuthModal />
-
-      {/* Platform Footer */}
-      <footer
-        style={{
-          borderTop: '1px solid var(--border-light)',
-          background: '#ffffff',
-          padding: '24px 20px',
-          marginTop: 'auto',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1320,
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 12,
-            fontSize: '0.85rem',
-            color: 'var(--text-secondary)',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 18 }}>🌾</span>
-            <strong>FasalRakshak AI (फसल रक्षक)</strong>
-            <span>— Built for Indian Agriculture & Perishable Supply Chain Resilience</span>
-          </div>
-
-          <div style={{ display: 'flex', gap: 16 }}>
-            <span>Nashik APMC Gateway</span>
-            <span>•</span>
-            <span>Gemini 2.0 AI Sandboxed</span>
-            <span>•</span>
-            <span>Pure Deterministic Recovery</span>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </AppShell>
   );
 }
 

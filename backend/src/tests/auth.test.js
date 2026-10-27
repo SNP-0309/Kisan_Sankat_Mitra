@@ -25,8 +25,8 @@ describe('Phase 1: Multi-Role Authentication & Authorization Suite', () => {
   afterAll(async () => {
     if (isDbAvailable) {
       await User.deleteMany({ phone: { $in: ['9876543210', '9876543211', '9876543212', '9876543213'] } });
-      await mongoose.disconnect();
     }
+    await mongoose.disconnect();
   });
 
   describe('Pure Service Layer & Security Invariants', () => {

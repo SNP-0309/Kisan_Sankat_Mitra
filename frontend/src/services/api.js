@@ -466,6 +466,59 @@ function handleLocalFallback(endpoint, options) {
     };
   }
 
+  // 14. Nearby Verified Buyers
+  if (endpoint.startsWith('/buyers/nearby')) {
+    return {
+      status: 'success',
+      data: [
+        {
+          _id: 'usr_buyer_001',
+          name: 'Sahyadri Agro Mega Foods Ltd.',
+          type: 'Processor',
+          district: 'Nashik',
+          cropsBought: ['TOMATO', 'ONION', 'GRAPES'],
+          dailyIntakeCapacity: '40 MT',
+          distanceKm: 8.4,
+          coordinates: [73.82, 20.04],
+          verified: true,
+        },
+        {
+          _id: 'usr_buyer_002',
+          name: 'Deola Mega Food Park Sourcing',
+          type: 'Retailer',
+          district: 'Nashik',
+          cropsBought: ['ONION', 'POTATO'],
+          dailyIntakeCapacity: '25 MT',
+          distanceKm: 14.2,
+          coordinates: [74.15, 20.21],
+          verified: true,
+        },
+        {
+          _id: 'usr_buyer_003',
+          name: 'Pimpalgaon APMC Floor Wholesalers',
+          type: 'Wholesaler',
+          district: 'Nashik',
+          cropsBought: ['TOMATO', 'CHILLI'],
+          dailyIntakeCapacity: '50 MT',
+          distanceKm: 19.6,
+          coordinates: [73.98, 20.17],
+          verified: true,
+        },
+        {
+          _id: 'usr_buyer_004',
+          name: 'Sinnar Agro Cold Chain Hub',
+          type: 'Exporter',
+          district: 'Nashik',
+          cropsBought: ['GRAPES', 'TOMATO', 'ONION'],
+          dailyIntakeCapacity: '35 MT',
+          distanceKm: 28.1,
+          coordinates: [73.99, 19.85],
+          verified: true,
+        },
+      ],
+    };
+  }
+
   return { status: 'success', data: [] };
 }
 
@@ -503,6 +556,18 @@ export const api = {
 
   // Admin
   getAdminOverview: () => request('/admin/overview'),
+
+  // Buyers
+  getNearbyBuyers: ({ lat, lng, crop, type, radiusKm = 50, limit = 50 } = {}) => {
+    const params = new URLSearchParams();
+    if (lat !== undefined) params.append('lat', lat);
+    if (lng !== undefined) params.append('lng', lng);
+    if (crop) params.append('crop', crop);
+    if (type) params.append('type', type);
+    if (radiusKm) params.append('radiusKm', radiusKm);
+    if (limit) params.append('limit', limit);
+    return request(`/buyers/nearby?${params.toString()}`);
+  },
 
   // AI Assistant
   queryAgent: ({ query, language, context }) =>

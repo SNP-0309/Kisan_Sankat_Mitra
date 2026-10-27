@@ -1,0 +1,75 @@
+/* ==========================================================================
+   FasalRakshak AI — Design Tokens (Reference Style System)
+   Inspired by clean, airy, high-contrast agrarian editorial aesthetics.
+   ========================================================================== */
+
+:root {
+  /* Surface & Background */
+  --color-bg: #F4F5F2;
+  --color-bg-card: #FFFFFF;
+  --color-bg-subtle: #ECEEEA;
+  --color-bg-surface-elevated: #FFFFFF;
+
+  /* Borders & Dividers */
+  --color-border: #E6E8E3;
+  --color-border-subtle: #EFF1EC;
+  --color-border-dark: #2B3A31;
+
+  /* Brand Colors */
+  --color-forest-black: #0F2A1D; /* Primary brand text and dark pill buttons */
+  --color-forest-dark: #163827;
+  --color-forest-medium: #23543B;
+  --color-green-success: #2E7D32;
+  --color-green-light: #E8F5E9;
+
+  /* Accent Highlight (Restrained to one vibrant orange) */
+  --color-orange-accent: #FF5A1F;
+  --color-orange-soft: #FFF0EB;
+
+  /* Alert / Distress Colors */
+  --color-amber-warning: #D97706;
+  --color-amber-soft: #FEF9E7;
+  --color-red-distress: #DC2626;
+  --color-red-soft: #FEE2E2;
+
+  /* Text & Captions */
+  --color-text-primary: #0F2A1D;
+  --color-text-secondary: #4A564F;
+  --color-text-muted: #748078;
+  --color-text-inverse: #FFFFFF;
+
+  /* Typography Scale */
+  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', 'Noto Sans Devanagari', -apple-system, sans-serif;
+
+  /* Corner Radii */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-card: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 9999px;
+
+  /* Elevations & Shadows */
+  --shadow-subtle: 0 2px 8px rgba(15, 42, 29, 0.04);
+  --shadow-card: 0 4px 20px rgba(15, 42, 29, 0.06);
+  --shadow-hover: 0 10px 30px rgba(15, 42, 29, 0.1);
+  --shadow-floating-nav: 0 8px 32px rgba(15, 42, 29, 0.08);
+
+  /* Spacing Grid (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Transitions */
+  --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 150ms var(--ease-snappy);
+  --transition-normal: 250ms var(--ease-snappy);
+}
